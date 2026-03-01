@@ -8,13 +8,7 @@ WORKDIR /app
 # Executa o build pulando os testes para ser mais rápido na VM
 RUN mvn clean install -DskipTests
 
-FROM openjdk:17-jre-alpine
-
-COPY --from=build /app/target/spring-boot-2-hello-world-1.0.2-SNAPSHOT.jar /app/app.jar
-
-WORKDIR /app
-
+FROM eclipse-temurin:17-jre-alpine
+COPY --from=build /app/target/*.jar /app/app.jar
 EXPOSE 8080
-
-# Corrigido: adicionadas as vírgulas necessárias no JSON array
-CMD ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
